@@ -25,7 +25,7 @@ server.js
 
 ```
 PORT=8001
-MONGO_URI=mongodb+srv://souravbhardwaj997_db_user:epSvszjvwF5LOF3W@cluster0.wegxiz6.mongodb.net/teams-app
+MONGO_URI=your-mongo-uri
 JWT_SECRET=Secret
 ```
 
