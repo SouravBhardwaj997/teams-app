@@ -8,14 +8,17 @@
 
 ```
 src/
-    config/
-        db.js
-    controllers/
-    models/
-    middlewares/
-    routes/
-    utils/
-    app.js
+----config/
+----------db.js
+----controllers/
+----------auth.controller.js
+----middlewares/
+----------auth.middleware.js
+----routes/
+----------auth.route.js
+----utils/
+----------validation.js
+----app.js
 server.js
 .env
 ```
