@@ -1,21 +1,21 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-export const commentSchema = new Schema(
+const commentSchema = new mongoose.Schema(
   {
     text: {
       type: String,
+      required: [true, "Comment text is required"],
+      trim: true,
+    },
+    task: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
       required: true,
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    taskId: {
-      type: Schema.Types.ObjectId,
       required: true,
-      ref: "Task",
-      index: true,
     },
   },
   {
@@ -23,6 +23,6 @@ export const commentSchema = new Schema(
   }
 );
 
-const Comment = model("Comment", commentSchema);
+commentSchema.index({ task: 1, createdAt: -1 });
 
-export default Comment;
+export default mongoose.model("Comment", commentSchema);

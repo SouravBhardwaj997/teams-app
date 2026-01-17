@@ -1,32 +1,32 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const teamSchema = new Schema(
+const teamSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Team name is required"],
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: "",
     },
     creator: {
-      type: Schema.Types.ObjectId,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     members: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-    tasks: {
-      type: [Schema.Types.ObjectId],
-      ref: "Task",
-    },
   },
   {
     timestamps: true,
   }
 );
 
-const Team = model("team", teamSchema);
-
-export default Team;
+export default mongoose.model("Team", teamSchema);

@@ -1,22 +1,24 @@
-import { model, Schema } from "mongoose";
-import bcrypt from "bcrypt";
-export const userSchema = new Schema(
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
+      trim: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
       lowercase: true,
-      index: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
     password: {
       type: String,
-      required: true,
-      select: false,
+      required: [true, "Password is required"],
+      minlength: [6, "Password must be at least 6 characters"],
     },
   },
   {
@@ -24,14 +26,4 @@ export const userSchema = new Schema(
   }
 );
 
-userSchema.pre("save", async function () {
-  if (this.isModified("password")) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(this.password, salt);
-    this.password = hashedPassword;
-  }
-});
-
-const User = model("user", userSchema);
-
-export default User;
+export default mongoose.model("User", userSchema);

@@ -1,34 +1,36 @@
-import { Schema, model } from "mongoose";
-import { commentSchema } from "./comment.model.js";
+import mongoose from "mongoose";
 
-const taskSchema = new Schema(
+const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Task title is required"],
+      trim: true,
     },
     description: {
       type: String,
-      required: true,
-    },
-    assignedTo: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    teamId: {
-      type: Schema.Types.ObjectId,
-      ref: "Team",
-      required: true,
+      trim: true,
+      default: "",
     },
     status: {
       type: String,
       enum: ["TODO", "DOING", "DONE"],
       default: "TODO",
-      required: true,
-      index: true,
     },
-    comments: {
-      type: [commentSchema],
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    team: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      required: true,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   {
@@ -36,6 +38,7 @@ const taskSchema = new Schema(
   }
 );
 
-const Task = model("Task", taskSchema);
+taskSchema.index({ team: 1, status: 1 });
+taskSchema.index({ team: 1, assignedTo: 1 });
 
-export default Task;
+export default mongoose.model("Task", taskSchema);
